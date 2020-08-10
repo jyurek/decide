@@ -1,14 +1,7 @@
-import {StatusBar} from 'expo-status-bar';
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  AppState,
-  ScrollView,
-} from 'react-native';
+import React from 'react'
+import { StatusBar } from 'expo-status-bar'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Picker } from '@react-native-community/picker'
 
 const ordinalNames = [
   'first',
@@ -21,62 +14,41 @@ const ordinalNames = [
   'eighth',
   'ninth',
   'tenth',
-];
+]
 
-const decide = (optionCount: number) => Math.floor(Math.random() * optionCount);
+const decide = (optionCount: number) => Math.floor(Math.random() * optionCount)
 
 export default function App() {
-  const [decision, setDecision] = React.useState<number>(decide(2));
-  const askAgain = React.useCallback(() => {
-    const newDecision = decide(2);
-    setDecision(newDecision);
-  }, []);
+  const [optionCount, setOptionCount] = React.useState(2)
 
-  const onAppStateChange = newAppState => {
-    if (newAppState === 'active') {
-      askAgain();
-    }
-  };
+  const decision = React.useMemo(() => decide(optionCount), [optionCount])
 
-  React.useEffect(() => {
-    AppState.addEventListener('change', onAppStateChange);
-    return () => {
-      AppState.removeEventListener('change', onAppStateChange);
-    };
-  }, []);
+  const changeOptionCount = React.useCallback((itemValue: React.ReactText) => {
+    setOptionCount(Number(itemValue))
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.top} />
-      <TouchableOpacity onPress={askAgain} style={styles.middle}>
-        <Text style={styles.label}>
-          Pick the {ordinalNames[decision]} option.
-        </Text>
-      </TouchableOpacity>
+      <Text style={styles.label}>
+        Pick the {ordinalNames[decision]} option.
+      </Text>
       <View style={styles.bottom}>
         <Text>Out of</Text>
-        <ScrollView
-          style={{height: 100, padding: 2}}
-          snapToInterval={16}
-          contentContainerStyle={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text>2</Text>
-          <Text>3</Text>
-          <Text>4</Text>
-          <Text>5</Text>
-          <Text>6</Text>
-          <Text>7</Text>
-          <Text>8</Text>
-          <Text>9</Text>
-          <Text>10</Text>
-        </ScrollView>
+        <Picker
+          selectedValue={optionCount}
+          style={styles.picker}
+          onValueChange={changeOptionCount}
+        >
+          {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => (
+            <Picker.Item value={x} label={x.toString()} key={x.toString()} />
+          ))}
+        </Picker>
         <Text>Options</Text>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -102,7 +74,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  picker: {
+    height: 24,
+    width: 32,
+    alignSelf: 'baseline',
+  },
   label: {
     fontSize: 20,
   },
-});
+})
