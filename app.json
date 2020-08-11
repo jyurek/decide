@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Decide",
+    "name": "Just Pick One",
     "slug": "decide",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -17,6 +17,8 @@
       "**/*"
     ],
     "ios": {
+      "buildNumber": "1",
+      "bundleIdentifier": "com.jonyurek.decide",
       "supportsTablet": true
     },
     "web": {
