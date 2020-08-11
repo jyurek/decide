@@ -31,9 +31,11 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.top} />
-      <Text style={styles.label}>
-        Pick the {ordinalNames[decision]} option.
-      </Text>
+      <View style={styles.middle}>
+        <Text style={styles.label}>
+          Pick the {ordinalNames[decision]} option.
+        </Text>
+      </View>
       <View style={styles.bottom}>
         <Text>Out of</Text>
         <Picker
