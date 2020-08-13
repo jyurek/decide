@@ -16,6 +16,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "expo": "~38.0.8",
     "expo-status-bar": "^1.0.2",
+    "expo-updates": "~0.2.8",
     "prettier": "^2.0.5",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",

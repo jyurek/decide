@@ -11,13 +11,14 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
+      "checkAutomatically": "ON_ERROR_RECOVERY",
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "buildNumber": "1",
+      "buildNumber": "2",
       "bundleIdentifier": "com.jonyurek.decide",
       "supportsTablet": true
     },

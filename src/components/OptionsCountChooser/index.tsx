@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Text} from 'react-native'
 import { Picker } from '@react-native-community/picker'
+import { Text} from 'react-native'
 
 import { styles } from './styles'
 
