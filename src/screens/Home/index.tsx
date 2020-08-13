@@ -4,20 +4,21 @@ import { StatusBar } from 'expo-status-bar'
 
 import { Decision } from '../../components/Decision'
 import { OptionsCountChooser } from '../../components/OptionsCountChooser'
+import { discontiguousRandomArray } from '../../utils/Array'
 
 import { styles } from './styles'
 
 export const Home: React.FC = () => {
   const [optionCount, setOptionCount] = React.useState(2)
   const [decision, setDecision] = React.useState(0)
-  const spinValues = React.useRef([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+  const spinValues = React.useRef([] as number[])
 
   const cursor = React.useRef(new Animated.Value(0)).current
   const spin = () => {
-    const newSpinValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map(() =>
-      decide(optionCount),
-    )
-    spinValues.current = newSpinValues
+    spinValues.current = discontiguousRandomArray({
+      max: optionCount,
+      length: 10,
+    })
     cursor.setValue(0)
     Animated.timing(cursor, {
       toValue: 9,
@@ -36,9 +37,6 @@ export const Home: React.FC = () => {
   }, [])
 
   React.useEffect(() => spin(), [optionCount])
-
-  const decide = (optionCount: number) =>
-    Math.floor(Math.random() * optionCount)
 
   const changeOptionCount = React.useCallback((itemValue: React.ReactText) => {
     setOptionCount(Number(itemValue))
