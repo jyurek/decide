@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { SafeAreaView, View, Animated, Easing } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 
 import { Decision } from '../../components/Decision'
@@ -9,10 +9,36 @@ import { styles } from './styles'
 
 export const Home: React.FC = () => {
   const [optionCount, setOptionCount] = React.useState(2)
+  const [decision, setDecision] = React.useState(0)
+  const spinValues = React.useRef([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+  const cursor = React.useRef(new Animated.Value(0)).current
+  const spin = () => {
+    const newSpinValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map(() =>
+      decide(optionCount),
+    )
+    spinValues.current = newSpinValues
+    cursor.setValue(0)
+    Animated.timing(cursor, {
+      toValue: 9,
+      duration: 1000,
+      useNativeDriver: false,
+      isInteraction: false,
+      easing: Easing.out(Easing.sin),
+    }).start()
+  }
+
+  React.useEffect(() => {
+    cursor.addListener(({ value }) => {
+      setDecision(spinValues.current[Math.floor(value)])
+    })
+    return () => cursor.removeAllListeners()
+  }, [])
+
+  React.useEffect(() => spin(), [optionCount])
 
   const decide = (optionCount: number) =>
     Math.floor(Math.random() * optionCount)
-  const decision = React.useMemo(() => decide(optionCount), [optionCount])
 
   const changeOptionCount = React.useCallback((itemValue: React.ReactText) => {
     setOptionCount(Number(itemValue))
