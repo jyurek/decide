@@ -1,12 +1,19 @@
 import * as React from 'react'
-import { SafeAreaView, View, Animated, Easing } from 'react-native'
+import {
+  Animated,
+  AsyncStorage,
+  Easing,
+  SafeAreaView,
+  View,
+} from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 
 import { Decision } from '../../components/Decision'
 import { OptionsCountChooser } from '../../components/OptionsCountChooser'
 import { discontiguousRandomArray } from '../../utils/Array'
-
 import { styles } from './styles'
+
+const OPTION_COUNT_KEY = 'decide/optionCount'
 
 export const Home: React.FC = () => {
   const [optionCount, setOptionCount] = React.useState(2)
@@ -30,6 +37,9 @@ export const Home: React.FC = () => {
   }
 
   React.useEffect(() => {
+    AsyncStorage.getItem(OPTION_COUNT_KEY).then((value) =>
+      setOptionCount(Number(value || 2)),
+    )
     cursor.addListener(({ value }) => {
       setDecision(spinValues.current[Math.floor(value)])
     })
@@ -39,7 +49,9 @@ export const Home: React.FC = () => {
   React.useEffect(() => spin(), [optionCount])
 
   const changeOptionCount = React.useCallback((itemValue: React.ReactText) => {
-    setOptionCount(Number(itemValue))
+    const value = Number(itemValue)
+    setOptionCount(value)
+    AsyncStorage.setItem(OPTION_COUNT_KEY, value.toString())
   }, [])
 
   return (
